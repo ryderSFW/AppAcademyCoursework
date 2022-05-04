@@ -1,4 +1,5 @@
 class Tile
+    attr_reader :bomb
     def initialize
         @bomb = false
         @flagged = false
@@ -16,6 +17,9 @@ class Tile
     end
     def reveal 
         @revealed = true unless @flagged
+    end
+    def set_bomb
+        @bomb = true
     end
     def to_s
         return "F" if @flagged == true
