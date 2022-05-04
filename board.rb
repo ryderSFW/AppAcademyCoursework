@@ -3,7 +3,7 @@ require_relative 'tile'
 class Board
     def initialize
         @grid = self.gen_empty_grid
-        p @grid
+        @neighbors_revealed = []
     end
     def gen_empty_grid
         Array.new(9) {Array.new(9) {Tile.new}} 
@@ -50,6 +50,9 @@ class Board
     end
     def reveal_pos(pos)
         self[pos].reveal
+        if self[pos].value == 0
+            reveal_neighbors(pos)
+        end
     end
     def get_neighbors(pos)
         #returns the positions of all neighbors of pos
@@ -87,7 +90,10 @@ class Board
         end
     end
     def reveal_neighbors(pos)
-        #reveals all neighboring tiles of pos
+        neighbors = get_neighbors(pos)
+        neighbors.each {|n| self[n].reveal}
+        @neighbors_revealed << pos
+        neighbors.each {|n| reveal_neighbors(n) if self[n].value == 0 && !@neighbors_revealed.include?(n)}
     end
     def set_all_tile_values
         @grid.each_with_index do |row, i|
@@ -104,13 +110,13 @@ end
 
 if __FILE__ == $PROGRAM_NAME
     board = Board.new
-    board.render
+    # board.render
     # p board[[0,0]]
     # board[[0,0]] = "X"
     # board.render
     board.place_bombs
     board.reveal_bombs
-    board.render
+    # board.render
     # board.get_neighbors([0, 0]) #1,1  0,1  1,0  
     # board.get_neighbors([4, 4]) #3,3  3,5  5,5  5,3  3,4  4,5  5,4  4,3
     # board.get_neighbors([8, 8]) #7,7  7,8  8,7
@@ -121,6 +127,12 @@ if __FILE__ == $PROGRAM_NAME
     # board.get_neighbors([3, 8]) #2,7  4,7  2,8  4,8, 3,7
     # board.get_neighbors([0, 3]) #1,4  1,2  0,4  1,3  0,2
     board.set_all_tile_values
+    # board.reveal_all
+    # board.render
+    # board[[0, 0]].set_bomb
+    board.reveal_pos([0, 0])
+    p board[[0, 0]]
+    board.render
     board.reveal_all
     board.render
 end
