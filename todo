@@ -1,9 +1,0 @@
-get input from the player in game
-    use switchcase for flag input
-    else, regular input
-write logic to determine if the game is over
-    let player know if they won or lost and stop the game
-keep getting input from player until game is over
-once base game is working, learn how to save/load game
-give player the option to load an existing save if one exists, else start a new game
-
