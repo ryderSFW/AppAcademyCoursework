@@ -4,6 +4,8 @@ class Board
     def initialize
         @grid = self.gen_empty_grid
         @neighbors_revealed = []
+        self.place_bombs
+        self.set_all_tile_values
     end
     def gen_empty_grid
         Array.new(9) {Array.new(9) {Tile.new}} 
@@ -105,6 +107,21 @@ class Board
     def reveal_all
         @grid.each_index {|i| @grid[0].each_index {|j| self.reveal_pos([i, j])}}
     end
+    def flag_unflag(pos)
+        if self[pos].flagged == false
+            self[pos].flag 
+        else
+            self[pos].unflag
+        end
+        
+    end
+    def won?
+        @grid.all? do |row|
+            row.all? do |tile|
+                tile.revealed || tile.bomb
+            end
+        end
+    end
 
 end
 
@@ -115,7 +132,7 @@ if __FILE__ == $PROGRAM_NAME
     # board[[0,0]] = "X"
     # board.render
     board.place_bombs
-    board.reveal_bombs
+    # board.reveal_bombs
     # board.render
     # board.get_neighbors([0, 0]) #1,1  0,1  1,0  
     # board.get_neighbors([4, 4]) #3,3  3,5  5,5  5,3  3,4  4,5  5,4  4,3
@@ -133,6 +150,6 @@ if __FILE__ == $PROGRAM_NAME
     board.reveal_pos([0, 0])
     p board[[0, 0]]
     board.render
-    board.reveal_all
-    board.render
+    # board.reveal_all
+    # board.render
 end
