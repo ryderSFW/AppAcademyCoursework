@@ -43,7 +43,6 @@ class Game
                 @game_over = true
                 @board.render
             else
-                p @board
                 input = get_move
                 make_move(input) unless input == 'save' || input == 'load'
             end
